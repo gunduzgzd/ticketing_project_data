@@ -1,17 +1,19 @@
 package com.example.converter;
 
 import com.example.dto.RoleDTO;
+import com.example.service.RoleService;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-//@Component
-//@ConfigurationPropertiesBinding
-//public class RoleDtoConverter implements Converter<String, RoleDTO> {
-/*
- //   RoleService;
+@Component
+@ConfigurationPropertiesBinding
+public class RoleDtoConverter implements Converter<String, RoleDTO> {
 
-    public RoleDtoConverter(RoleService roleService) {
+    RoleService roleService;
+
+    public RoleDtoConverter(@Lazy RoleService roleService) {
         this.roleService = roleService;
     }
 
@@ -26,6 +28,5 @@ import org.springframework.stereotype.Component;
 
     }
 
- */
-
+}
 

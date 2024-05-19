@@ -2,14 +2,15 @@ package com.example.converter;
 
 import com.example.dto.UserDTO;
 //import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
+import com.example.service.UserService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-/*
+
 @Component
 //@ConfigurationPropertiesBinding
 public class UserDtoConverter implements Converter<String, UserDTO> {
 
-    UserService;
+    UserService userService;
 
     public UserDtoConverter(UserService userService) {
         this.userService = userService;
@@ -22,10 +23,10 @@ public class UserDtoConverter implements Converter<String, UserDTO> {
             return null;
         }
 
-        return userService.findById(source);
+        return userService.findByUserName(source);
 
     }
 
- */
+
 
 }
