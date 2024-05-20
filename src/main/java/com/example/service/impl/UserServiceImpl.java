@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.example.entity.Role;
 import com.example.mapper.UserMapper;
 import com.example.dto.UserDTO;
 import com.example.entity.User;
@@ -21,7 +22,6 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
-
 
 
     @Override
@@ -69,12 +69,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> ListAllByRole(String role) {
-
-        List<User> users = userRepository.findByRoleIgnoreCase(role);
+    public List<UserDTO> listAllByRole(String role) {
+        List<User> users = userRepository.findByRoleDescriptionIgnoreCase(role);
 
         return users.stream().map(userMapper::convertToDto).collect(Collectors.toList());
     }
+
 
     @Override
     public List<UserDTO> listAllUsers() {

@@ -1,11 +1,14 @@
 package com.example.service;
 
 import com.example.dto.UserDTO;
+import com.example.entity.Role;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
 public interface UserService {
+
+
 
     List<UserDTO> listAllUsers();
     UserDTO findByUserName(String username);
@@ -18,5 +21,8 @@ public interface UserService {
 
     void delete(String username);
 
-    List<UserDTO> ListAllByRole(String role);
+    List<UserDTO> listAllByRole(String role);
+
+
+
 }

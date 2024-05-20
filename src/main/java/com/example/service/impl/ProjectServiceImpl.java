@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import com.example.dto.ProjectDTO;
 import com.example.entity.Project;
+import com.example.enums.Status;
 import com.example.mapper.ProjectMapper;
 import com.example.repository.ProjectRepository;
 import com.example.service.ProjectService;
@@ -24,30 +25,56 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDTO getByProjectCode(String code) {
-        return null;
+        Project project = projectRepository.findByProjectCode(code);
+        return projectMapper.convertToDto(project);
     }
 
     @Override
     public List<ProjectDTO> listAllProjects() {
 
-        List<Project> list =projectRepository.findAll(Sort.by("ProjectCode"));
+        List<Project> list = projectRepository.findAll(Sort.by("projectCode"));
+
         return list.stream().map(projectMapper::convertToDto).collect(Collectors.toList());
     }
 
     @Override
     public void save(ProjectDTO dto) {
 
-       projectRepository.save(projectMapper.convertTiEntity(dto));
+        dto.setProjectStatus(Status.OPEN);
+        Project project = projectMapper.convertToEntity(dto);
 
+        projectRepository.save(project);
     }
 
     @Override
     public void update(ProjectDTO dto) {
+
+        Project project = projectRepository.findByProjectCode(dto.getProjectCode());
+
+        Project convertedProject = projectMapper.convertToEntity(dto);
+
+        convertedProject.setId(project.getId());
+
+        convertedProject.setProjectStatus(project.getProjectStatus());
+
+        projectRepository.save(convertedProject);
+
 
     }
 
     @Override
     public void delete(String code) {
 
+        Project project = projectRepository.findByProjectCode(code);
+        project.setIsDeleted(true);
+        projectRepository.save(project);
+    }
+
+    @Override
+    public void complete(String projectCode) {
+
+        Project project = projectRepository.findByProjectCode(projectCode);
+        project.setProjectStatus(Status.COMPLETE);
+        projectRepository.save(project);
     }
 }

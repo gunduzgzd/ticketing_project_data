@@ -1,16 +1,19 @@
 package com.example.dto;
 
 import com.example.enums.Gender;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.*;
 
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class UserDTO {
+
+
+    private Long id;
 
     @NotBlank
     @Size(max = 15, min = 2)

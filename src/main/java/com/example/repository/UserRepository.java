@@ -1,5 +1,6 @@
 package com.example.repository;
 
+import com.example.entity.Role;
 import com.example.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,6 +10,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     User findByUserName(String userName);
 
-    List<User> findByRoleIgnoreCase(String description);
+    List<User> findByRoleDescriptionIgnoreCase(String description);
 
 }
