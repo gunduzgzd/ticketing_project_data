@@ -1,6 +1,6 @@
 package com.example.service.impl;
 
-import com.example.config.mapper.UserMapper;
+import com.example.mapper.UserMapper;
 import com.example.dto.UserDTO;
 import com.example.entity.User;
 import com.example.repository.UserRepository;
@@ -22,13 +22,7 @@ public class UserServiceImpl implements UserService {
         this.userMapper = userMapper;
     }
 
-    @Override
-    public List<UserDTO> listAllUsers() {
 
-        List<User> userList = userRepository.findAll(Sort.by("firstName"));
-
-        return userList.stream().map(userMapper::convertToDto).collect(Collectors.toList());
-    }
 
     @Override
     public UserDTO findByUserName(String username) {
@@ -64,5 +58,29 @@ public class UserServiceImpl implements UserService {
         return findByUserName(user.getUserName());
 
 
+    }
+
+    @Override
+    public void delete(String username) {
+
+        User user = userRepository.findByUserName(username);
+        user.setIsDeleted(true);
+        userRepository.save(user);
+    }
+
+    @Override
+    public List<UserDTO> ListAllByRole(String role) {
+
+        List<User> users = userRepository.findByRoleIgnoreCase(role);
+
+        return users.stream().map(userMapper::convertToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDTO> listAllUsers() {
+
+        List<User> userList = userRepository.findAll(Sort.by("firstName"));
+
+        return userList.stream().map(userMapper::convertToDto).collect(Collectors.toList());
     }
 }

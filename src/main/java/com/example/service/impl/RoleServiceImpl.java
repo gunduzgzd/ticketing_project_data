@@ -1,11 +1,10 @@
 package com.example.service.impl;
 
-import com.example.config.mapper.RoleMapper;
+import com.example.mapper.RoleMapper;
 import com.example.dto.RoleDTO;
 import com.example.entity.Role;
 import com.example.repository.RoleRepository;
 import com.example.service.RoleService;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

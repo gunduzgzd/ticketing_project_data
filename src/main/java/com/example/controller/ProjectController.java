@@ -1,17 +1,23 @@
 package com.example.controller;
 
 
+import com.example.dto.ProjectDTO;
+import com.example.service.UserService;
+import com.example.service.ProjectService;
 import org.springframework.stereotype.Controller;
 
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 
 
 @Controller
 @RequestMapping("/project")
 public class ProjectController {
 
-    /*
+
     private final UserService userService;
     private final ProjectService projectService;
 
@@ -24,20 +30,22 @@ public class ProjectController {
     public String createProject(Model model) {
 
         model.addAttribute("project", new ProjectDTO());
-        model.addAttribute("managers", userService.findManagers());
-        model.addAttribute("projects", projectService.findAll());
+        model.addAttribute("managers", userService.ListAllByRole("manager"));
+        model.addAttribute("projects", projectService.listAllProjects());
 
         return "/project/create";
 
     }
+
+
 
     @PostMapping("/create")
     public String insertProject(@Valid @ModelAttribute("project") ProjectDTO project, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
 
-            model.addAttribute("managers", userService.findManagers());
-            model.addAttribute("projects", projectService.findAll());
+            model.addAttribute("managers", userService.ListAllByRole("manager"));
+            model.addAttribute("projects", projectService.listAllProjects());
 
             return "/project/create";
 
@@ -48,6 +56,8 @@ public class ProjectController {
         return "redirect:/project/create";
 
     }
+
+    /*
 
     @GetMapping("/delete/{projectCode}")
     public String deleteProject(@PathVariable("projectCode") String projectCode) {

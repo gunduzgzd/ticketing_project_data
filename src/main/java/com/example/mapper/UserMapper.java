@@ -1,4 +1,4 @@
-package com.example.config.mapper;
+package com.example.mapper;
 
 
 import com.example.dto.UserDTO;
