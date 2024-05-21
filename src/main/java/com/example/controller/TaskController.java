@@ -2,6 +2,9 @@ package com.example.controller;
 
 import com.example.dto.TaskDTO;
 import com.example.enums.Status;
+import com.example.service.ProjectService;
+import com.example.service.TaskService;
+import com.example.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,7 +15,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/task")
 public class TaskController {
-    /*
+
 
     private final UserService userService;
     private final ProjectService projectService;
@@ -28,13 +31,14 @@ public class TaskController {
     public String createTask(Model model) {
 
         model.addAttribute("task", new TaskDTO());
-        model.addAttribute("projects", projectService.findAll());
-        model.addAttribute("employees", userService.findEmployees());
-        model.addAttribute("tasks", taskService.findAll());
+        model.addAttribute("projects", projectService.listAllProjects());
+        model.addAttribute("employees", userService.listAllByRole("employee"));
+        model.addAttribute("tasks", taskService.listAllTasks());
 
         return "/task/create";
 
     }
+    /*
 
     @PostMapping("/create")
     public String insertTask(@Valid @ModelAttribute("task") TaskDTO task, BindingResult bindingResult, Model model) {
