@@ -2,6 +2,7 @@ package com.example.controller;
 
 
 import com.example.dto.ProjectDTO;
+import com.example.dto.UserDTO;
 import com.example.service.RoleService;
 import com.example.service.UserService;
 import com.example.service.ProjectService;
@@ -12,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @Controller
@@ -103,19 +105,19 @@ public class ProjectController {
 
     }
 
-    /*
-
     @GetMapping("/manager/project-status")
     public String getProjectByManager(Model model) {
 
-        UserDTO manager = userService.findById("john@cydeo.com");
-        List<ProjectDTO> projects = projectService.getCountedListOfProjectDTO(manager);
+
+        List<ProjectDTO> projects = projectService.listAllProjectDetails();
 
         model.addAttribute("projects", projects);
 
         return "/manager/project-status";
 
     }
+
+    /*
 
     @GetMapping("/manager/complete/{projectCode}")
     public String managerCompleteProject(@PathVariable("projectCode") String projectCode) {

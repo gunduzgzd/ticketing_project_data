@@ -22,6 +22,8 @@ import java.time.LocalDate;
 @Where(clause = "is_deleted=false")
 public class Task extends BaseEntity{
 
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;
