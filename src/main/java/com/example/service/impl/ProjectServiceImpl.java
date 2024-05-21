@@ -9,6 +9,7 @@ import com.example.mapper.ProjectMapper;
 import com.example.mapper.UserMapper;
 import com.example.repository.ProjectRepository;
 import com.example.service.ProjectService;
+import com.example.service.TaskService;
 import com.example.service.UserService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -23,12 +24,14 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectMapper projectMapper;
     private final UserService userService;
     private final UserMapper userMapper;
+    private final TaskService taskService;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectMapper projectMapper, UserService userService, UserMapper userMapper) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectMapper projectMapper, UserService userService, UserMapper userMapper, TaskService taskService) {
         this.projectRepository = projectRepository;
         this.projectMapper = projectMapper;
         this.userService = userService;
         this.userMapper = userMapper;
+        this.taskService = taskService;
     }
 
     @Override
@@ -86,21 +89,24 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.save(project);
     }
 
+
     @Override
     public List<ProjectDTO> listAllProjectDetails() {
 
         UserDTO currentUserDTO = userService.findByUserName("harold@manager.com");
 
-        User user = userMapper.convertTiEntity(currentUserDTO);
+        User user = userMapper.convertToEntity(currentUserDTO);
 
         List<Project> list = projectRepository.findAllByAssignedManager(user);
 
         return list.stream().map(project -> {
             ProjectDTO obj = projectMapper.convertToDto(project);
-            obj.setUnfinishedTaskCounts(3);
-            obj.setCompleteTaskCounts(5);
+            obj.setUnfinishedTaskCounts(taskService.totalNonCompletedTask(project.getProjectCode()));
+            obj.setCompleteTaskCounts(taskService.totalCompletedTask(project.getProjectCode()));
 
             return obj;
         }).collect(Collectors.toList());
     }
+
+
 }

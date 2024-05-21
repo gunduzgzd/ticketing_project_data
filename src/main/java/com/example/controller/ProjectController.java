@@ -105,6 +105,7 @@ public class ProjectController {
 
     }
 
+
     @GetMapping("/manager/project-status")
     public String getProjectByManager(Model model) {
 
@@ -118,7 +119,6 @@ public class ProjectController {
     }
 
     /*
-
     @GetMapping("/manager/complete/{projectCode}")
     public String managerCompleteProject(@PathVariable("projectCode") String projectCode) {
         projectService.complete(projectService.findById(projectCode));

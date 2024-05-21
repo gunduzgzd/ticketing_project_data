@@ -1,15 +1,12 @@
 package com.example.service.impl;
 
 import com.example.dto.TaskDTO;
-import com.example.entity.Project;
-import com.example.entity.Role;
 import com.example.entity.Task;
 import com.example.enums.Status;
 import com.example.mapper.TaskMapper;
 import com.example.repository.TaskRepository;
 import com.example.service.TaskService;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -72,5 +69,15 @@ public class TaskServiceImpl implements TaskService {
             task.get().setIsDeleted(true);
             taskRepository.save(task.get());
         }
+    }
+
+    @Override
+    public int totalNonCompletedTask(String projectCode) {
+        return taskRepository.totalNonCompletedTasks(projectCode);
+    }
+
+    @Override
+    public int totalCompletedTask(String projectCode) {
+        return taskRepository.totalCompletedTasks(projectCode);
     }
 }
