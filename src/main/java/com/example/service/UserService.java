@@ -14,8 +14,8 @@ public interface UserService {
     UserDTO findByUserName(String username);
     void save(UserDTO user);
 
-    @Transactional
-    void deleteByUserName(String username);
+ //   @Transactional
+  //  void deleteByUserName(String username);
 
     UserDTO update(UserDTO user);
 
