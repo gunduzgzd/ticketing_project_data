@@ -13,4 +13,6 @@ public interface ProjectRepository extends JpaRepository<Project,Long> {
 
     List<Project> findAllByAssignedManager(User manager);
 
+
+
 }

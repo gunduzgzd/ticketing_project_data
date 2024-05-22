@@ -1,12 +1,19 @@
 package com.example.service.impl;
 
+import com.example.dto.ProjectDTO;
 import com.example.dto.TaskDTO;
+import com.example.dto.UserDTO;
+import com.example.entity.Project;
 import com.example.entity.Task;
 import com.example.enums.Status;
+import com.example.mapper.ProjectMapper;
 import com.example.mapper.TaskMapper;
+import com.example.mapper.UserMapper;
 import com.example.repository.TaskRepository;
 import com.example.service.TaskService;
+import com.example.service.UserService;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +24,16 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
+    private final ProjectMapper projectMapper;
+    private final UserService userService;
+    private final UserMapper userMapper;
 
-    public TaskServiceImpl(TaskRepository taskRepository, TaskMapper taskMapper) {
+    public TaskServiceImpl(TaskRepository taskRepository, TaskMapper taskMapper, ProjectMapper projectMapper, UserService userService, UserMapper userMapper) {
         this.taskRepository = taskRepository;
         this.taskMapper = taskMapper;
+        this.projectMapper = projectMapper;
+        this.userService = userService;
+        this.userMapper = userMapper;
     }
 
 
@@ -46,8 +59,8 @@ public class TaskServiceImpl implements TaskService {
         Optional<Task> task = taskRepository.findById(dto.getId());
         Task convertedTask = taskMapper.convertToEntity(dto);
 
-        if (task.isPresent()){
-            convertedTask.setTaskStatus(task.get().getTaskStatus());
+        if (task.isPresent()) {
+            convertedTask.setTaskStatus(dto.getTaskStatus() == null ? task.get().getTaskStatus() : dto.getTaskStatus());
             convertedTask.setAssignedDate(task.get().getAssignedDate());
             taskRepository.save(convertedTask);
         }
@@ -56,7 +69,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDTO findById(Long id) {
-       Optional<Task> task =taskRepository.findById(id);
+        Optional<Task> task = taskRepository.findById(id);
         return task.map(taskMapper::convertToDto).orElse(null);
     }
 
@@ -79,5 +92,50 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public int totalCompletedTask(String projectCode) {
         return taskRepository.totalCompletedTasks(projectCode);
+    }
+
+    @Override
+    public void deleteByProject(ProjectDTO projectDTO) {
+
+        Project project = projectMapper.convertToEntity(projectDTO);
+
+        List<Task> tasks = taskRepository.findAllByProject(project);
+
+        tasks.forEach(task -> delete(task.getId()));
+
+
+    }
+
+    @Override
+    public void completeByProject(ProjectDTO projectDTO) {
+
+
+        Project project = projectMapper.convertToEntity(projectDTO);
+
+        List<Task> tasks = taskRepository.findAllByProject(project);
+
+        tasks.stream().map(taskMapper::convertToDto).forEach(taskDTO -> {
+            taskDTO.setTaskStatus(Status.COMPLETE);
+            update(taskDTO);
+        });
+    }
+
+    @Override
+    public List<TaskDTO> listAllTasksByStatusIsNot(Status status) {
+
+        UserDTO loggedInUser = userService.findByUserName("john@employee.com");
+        List<Task> tasks = taskRepository.
+                findAllByTaskStatusIsNotAndAssignedEmployee(status, userMapper.convertToEntity(loggedInUser));
+
+        return tasks.stream().map(taskMapper::convertToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TaskDTO> listAllTasksByStatus(Status status) {
+        UserDTO loggedInUser = userService.findByUserName("john@employee.com");
+        List<Task> tasks = taskRepository.
+                findAllByTaskStatusAndAssignedEmployee(status, userMapper.convertToEntity(loggedInUser));
+
+        return tasks.stream().map(taskMapper::convertToDto).collect(Collectors.toList());
     }
 }
